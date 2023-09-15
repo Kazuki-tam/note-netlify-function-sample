@@ -1,0 +1,21 @@
+<div id="article-list"></div>
+
+<script>
+  async function fetchData() {
+    const res = await fetch("/.netlify/functions/note-fetch-rss");
+    const articles = await res.json();
+    const articleListElement = document.getElementById("article-list");
+
+    articles.forEach((article: { title: string; description: string }) => {
+      const listItem = document.createElement("li");
+      listItem.innerHTML = `
+        <h2>${article.title}</h2>
+        <p>${article.description}</p>
+      `;
+      articleListElement?.appendChild(listItem);
+    });
+  }
+
+  // ページが読み込まれたらfetchDataを呼び出す
+  window.addEventListener("load", fetchData);
+</script>
