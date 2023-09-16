@@ -1,17 +1,17 @@
 ---
-import RssFeed from "../components/RssFeed.astro";
+import RssFeed from "../components/RssFeed.tsx";
 ---
 
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
+    <title>Netlify Functionsでnote記事を取得</title>
   </head>
   <body>
-    <h1>Astro</h1>
-    <RssFeed />
+    <h1>Netlify FunctionsとAstroでnote記事を表示する</h1>
+    <RssFeed client:load />
   </body>
 </html>
