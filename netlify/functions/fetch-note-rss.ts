@@ -1,44 +1,70 @@
 import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
 import axios from "axios";
 import xml2js from "xml2js";
+import { config } from "dotenv";
 
-// RSSフィードのURL
-const NOTE_RSS = "https://note.com/yonemoto/rss";
+config();
+
+// 環境変数のチェック
+if (!process.env.ALLOWED_ORIGIN || !process.env.RSS_URL) {
+  throw new Error("環境変数が設定されていません");
+}
+
+// 設定値
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "undefined";
+const RSS_URL = process.env.RSS_URL;
+const HEADERS = {
+  "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Methods": "GET",
+  "Content-Type": "application/json",
+};
 
 /**
- * Netlify Functionのハンドラー
- * @param event - NetlifyのHandlerEventオブジェクト
- * @param context - NetlifyのHandlerContextオブジェクト
+ * RSS フィードを取得し、JSON形式で返却するNetlify Function
+ * @param event - NetlifyのHandlerEvent
+ * @param context - NetlifyのHandlerContext
  * @returns レスポンスオブジェクト
  */
 const handler: Handler = async (
   event: HandlerEvent,
   context: HandlerContext
 ) => {
-  const headers = {
-    "Access-Control-Allow-Origin": "https://note-rss-sample.netlify.app/",
-    "Access-Control-Allow-Headers": "Content-Type",
-  };
+  // CORSの許可
+  const origin = event.headers.origin || "undefined";
+
+  if (event.httpMethod !== "GET") {
+    return {
+      statusCode: 405,
+      body: "Method Not Allowed",
+    };
+  }
+
+  if (origin !== ALLOWED_ORIGIN) {
+    return {
+      statusCode: 403,
+      body: "Unauthorized",
+    };
+  }
 
   try {
     // RSSフィードを取得
-    const response = await axios.get(NOTE_RSS);
+    const response = await axios.get(RSS_URL);
 
     // XMLをJSONに変換
-    const result = await xml2js.parseStringPromise(response.data);
+    const parsedData = await xml2js.parseStringPromise(response.data);
 
-    // 成功レスポンスを返す
     return {
       statusCode: 200,
-      headers,
-      body: JSON.stringify(result),
+      headers: HEADERS,
+      body: JSON.stringify(parsedData),
     };
   } catch (error) {
-    console.error("Error fetching RSS:", error); // エラーログを出力
+    console.error("Error fetching RSS:", error);
 
-    // エラーレスポンスを返す
     return {
       statusCode: 500,
+      headers: HEADERS,
       body: "RSSの取得に失敗しました",
     };
   }
