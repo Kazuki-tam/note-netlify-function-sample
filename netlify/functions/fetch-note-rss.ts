@@ -11,7 +11,7 @@ if (!process.env.ALLOWED_ORIGIN || !process.env.RSS_URL) {
 }
 
 // 設定値
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "undefined";
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN;
 const RSS_URL = process.env.RSS_URL;
 const HEADERS = {
   "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
@@ -30,20 +30,10 @@ const handler: Handler = async (
   event: HandlerEvent,
   context: HandlerContext
 ) => {
-  // CORSの許可
-  const origin = event.headers.origin || "undefined";
-
   if (event.httpMethod !== "GET") {
     return {
       statusCode: 405,
       body: "Method Not Allowed",
-    };
-  }
-
-  if (origin !== ALLOWED_ORIGIN) {
-    return {
-      statusCode: 403,
-      body: "Unauthorized",
     };
   }
 
