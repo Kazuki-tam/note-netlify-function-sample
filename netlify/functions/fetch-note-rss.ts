@@ -15,6 +15,11 @@ const handler: Handler = async (
   event: HandlerEvent,
   context: HandlerContext
 ) => {
+  const headers = {
+    "Access-Control-Allow-Origin": "https://note-rss-sample.netlify.app/",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+
   try {
     // RSSフィードを取得
     const response = await axios.get(NOTE_RSS);
@@ -25,6 +30,7 @@ const handler: Handler = async (
     // 成功レスポンスを返す
     return {
       statusCode: 200,
+      headers,
       body: JSON.stringify(result),
     };
   } catch (error) {
