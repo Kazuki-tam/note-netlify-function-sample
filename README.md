@@ -2,7 +2,7 @@
 Astro環境でnote記事を表示するモック環境。  
 noteのRSSを利用し、自サイトに記事出力を行うことを目指します。
 
-[Demo環境](https://note-rss-sample.netlify.app/)
+[Demo環境](https://note-article-astro-static.netlify.app/)
 
 ## ✅ 利用条件
 - [note記事情報](https://note.com/)
