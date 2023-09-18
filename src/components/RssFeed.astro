@@ -1,0 +1,30 @@
+---
+import { fetchNoteRss } from "../lib/fetchNoteRss";
+import { extractArticles } from "../lib/extractArticles";
+
+const RSS_URL = "https://note.com/yonemoto/rss";
+const data = await fetchNoteRss(RSS_URL);
+const articles = data ? extractArticles(data) : null;
+---
+
+<ul>
+  {
+    articles?.map((article) => (
+      <li>
+        <a href={article.link[0]} target="_blank" rel="noopener noreferrer">
+          <h2>{article.title[0]}</h2>
+          {article["media:thumbnail"] && article["media:thumbnail"][0] && (
+            <div>
+              <img
+                src={article["media:thumbnail"][0]}
+                alt=""
+                width="800"
+                height="419"
+              />
+            </div>
+          )}
+        </a>
+      </li>
+    ))
+  }
+</ul>

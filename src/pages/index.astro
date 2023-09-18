@@ -1,5 +1,5 @@
 ---
-import RssFeed from "../components/RssFeed.tsx";
+import RssFeed from "../components/RssFeed.astro";
 ---
 
 <html lang="ja">
@@ -8,10 +8,10 @@ import RssFeed from "../components/RssFeed.tsx";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Netlify Functionsでnote記事を取得</title>
+    <title>note記事一覧を取得</title>
   </head>
   <body>
-    <h1>Netlify FunctionsとAstroでnote記事を表示する</h1>
-    <RssFeed client:load />
+    <h1>note記事一覧を表示する</h1>
+    <RssFeed />
   </body>
 </html>
